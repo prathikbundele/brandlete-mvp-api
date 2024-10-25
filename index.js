@@ -18,12 +18,14 @@ mongoose.connect('mongodb://localhost:27017/BrandleteSampleDB')
 
 // Define a schema for the User collection
 const userSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
   username: String,
   email: String,
   password: String,
   instagram : String,
   college : String,
-  sport : String
+  sport : String,
 });
 
 // Create a User model based on the schema
@@ -62,6 +64,8 @@ const verifyToken = (req, res, next) => {
   
       // Create a new user
       const newUser = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
@@ -94,21 +98,29 @@ const verifyToken = (req, res, next) => {
   
       // Generate JWT token
       const token = jwt.sign({ email: user.email }, 'secret');
-      res.status(200).json({ token });
+      res.status(200).json({ token,
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+       });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
   });
   
   // Protected route to get user details
-  app.get('/api/user', verifyToken, async (req, res) => {
+  app.get('/api/user', async (req, res) => {
+
+    console.log("query email : ", req.query)
     try {
       // Fetch user details using decoded token
-      const user = await User.findOne({ email: req.user.email });
+      const user = await User.findOne({ email: req.query.email });
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
-      res.status(200).json({ username: user.username, email: user.email });
+      res.status(200).json({ user });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
