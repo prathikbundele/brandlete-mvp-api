@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
+const commonRoutes = require('./routes/common');
 
 dotenv.config();
 
@@ -18,8 +19,9 @@ app.use(express.json());
 app.use(cors())
 
 // Routes
-app.use('/api', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/api', profileRoutes);
+app.use('/api', commonRoutes)
 
 // Start the server
 app.listen(PORT, () => {

@@ -29,6 +29,10 @@ const socialSchema = new mongoose.Schema({
 
 // Define User schema
 const userSchema = mongoose.Schema({
+  about : {
+    type : String,
+    required : false
+  },
   firstName: {
     type: String,
     required: true
@@ -71,7 +75,7 @@ const userSchema = mongoose.Schema({
   },
   instagram: {
     type: String,
-    required: true,
+    required: false,
   },
   hometown : {
     type : String,
@@ -96,6 +100,8 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
+  // const decodedPassword = CryptoJS.enc.Base64.parse(this.password).toString(CryptoJS.enc.Utf8);
+  // console.log()
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });

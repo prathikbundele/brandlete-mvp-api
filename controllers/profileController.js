@@ -23,10 +23,8 @@ exports.updateProfile = async (req, res) => {
 // Get User Details
 exports.getUserDetails = async (req, res) => {
 
-  console.log("req recieved : ", req)
   try {
     const user = await User.findById(req.user.id).select('-password');
-    console.log("returning user", user)
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json(user);
