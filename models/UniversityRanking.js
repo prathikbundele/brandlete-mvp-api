@@ -8,5 +8,5 @@ const UniversityRankingSchema = mongoose.Schema({
     timestamp : true
 })
 
-const UniversityRanking = mongoose.model('University', UniversityRankingSchema, 'university_rankings');
+const UniversityRanking = mongoose.model('University', UniversityRankingSchema, 'university_ranking');
 module.exports = UniversityRanking;

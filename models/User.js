@@ -33,6 +33,10 @@ const userSchema = mongoose.Schema({
     type : String,
     required : false
   },
+  profilePicture: {
+    type: String,
+    default: '',
+  },
   firstName: {
     type: String,
     required: true
@@ -88,8 +92,8 @@ const userSchema = mongoose.Schema({
   weight: { type: Number, required: false },
   description: { type: String, required: false },
   location: { type: String, required: false },
-  academicDetails: academicSchema, // Embed academic details
-  athleticDetails: athleticSchema, // Array of athletic details (multiple sports supported)
+  academicDetails: academicSchema, 
+  athleticDetails: athleticSchema, 
   socialDetails: socialSchema,
 }, {
   timestamps: true,
@@ -101,7 +105,6 @@ userSchema.pre('save', async function (next) {
     next();
   }
   // const decodedPassword = CryptoJS.enc.Base64.parse(this.password).toString(CryptoJS.enc.Utf8);
-  // console.log()
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
