@@ -51,12 +51,6 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.social = async (req, res) => {
-  const platform = req.query.platform; 
-  const authUrl = `https://api.sandbox.getphyllo.com/oauth/authorize?client_id=${process.env.PHYLLO_CLIENT_ID}&redirect_uri=${process.env.PHYLLO_REDIRECT_URI}&scope=user_profile,user_media&response_type=code&platform=twitter`;
-  res.redirect(authUrl);
-};
-
 exports.authCallback = async (req, res) => {
   const authorizationCode = req.query.code;
 

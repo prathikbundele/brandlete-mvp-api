@@ -1,30 +1,29 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// Define Game Metrics as Key-Value Pairs for Dynamic Fields
 const metricSchema = new mongoose.Schema({
-  name: { type: String, required: false }, // Name of the metric (e.g., "Points", "Assists")
-  value: { type: Number, required: false } // Value for the metric (e.g., 25, 7, etc.)
+  name: { type: String, required: false },
+  value: { type: Number, required: false }
 });
 
-// Define the Athletic Details Schema for each sport
 const athleticSchema = new mongoose.Schema({
-  sport: { type: String, required: false }, // Sport the athlete plays (e.g., "Basketball", "Soccer")
-  position: { type: String, required: false }, // Athlete's position (e.g., "Striker", "Goalkeeper")
-  metrics: [metricSchema] // Array of key-value pairs for metrics
+  sport: { type: String, required: false },
+  position: { type: String, required: false },
+  metrics: [metricSchema] 
 });
 
-// Define the Academic Details Schema
 const academicSchema = new mongoose.Schema({
-  gpa: { type: Number, required: false }, // GPA (e.g., 3.8)
-  testScore: { type: Number, required: false }, // Test score (e.g., SAT score)
-  scoreCategory: { type: String, required: false }, // Test type (e.g., SAT, ACT)
+  gpa: { type: Number, required: false },
+  testScore: { type: Number, required: false },
+  scoreCategory: { type: String, required: false },
 });
 
-// Define the Academic Details Schema
 const socialSchema = new mongoose.Schema({
-  followers: { type: Number, required: false }, // GPA (e.g., 3.8)
-  engagement: { type: Number, required: false }, // Test score (e.g., SAT score)
+  socialHandle: {type: String, required: false },
+  followers: { type: Number, required: false },
+  engagement: { type: Number, required: false },
+  average_likes: {type: Number, required: false },
+  total_posts: {type: Number, required: false}
 });
 
 // Define User schema

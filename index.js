@@ -112,8 +112,6 @@ const verifyToken = (req, res, next) => {
   
   // Protected route to get user details
   app.get('/api/user', async (req, res) => {
-
-    console.log("query email : ", req.query)
     try {
       // Fetch user details using decoded token
       const user = await User.findOne({ email: req.query.email });

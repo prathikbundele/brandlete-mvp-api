@@ -2,26 +2,6 @@ const axios = require('axios');
 const User = require('../models/User');
 const UniversityRanking = require('../models/UniversityRanking');
 
-// Update Profile
-exports.updateProfile = async (req, res) => {
-  const { phone, address, testScore } = req.body;
-
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    // Update user's profile details
-    user.phone = phone || user.phone;
-    user.address = address || user.address;
-    user.testScore = testScore || user.testScore;
-
-    await user.save();
-    res.status(200).json({ message: 'Profile updated successfully', user });
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating profile', error: error.message });
-  }
-};
-
 // Get User Details
 exports.getUserDetails = async (req, res) => {
 
@@ -56,7 +36,7 @@ exports.uploadProfilePicture = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    user.profilePicture = req.file.path; // Save the file path to the user's profile picture field
+    user.profilePicture = req.file.path; 
     await user.save();
 
     res.status(200).json({ message: 'Profile picture uploaded successfully', user });
@@ -82,7 +62,6 @@ exports.getUserProfilePicture = async (req, res) => {
 exports.getUserScores = async (req, res) => {
   const email = req.params.email;
   try {
-    // Fetch the user by ID
     const user = await User.findOne({email}).select('academicDetails athleticDetails');
 
     if (!user) {
@@ -90,7 +69,6 @@ exports.getUserScores = async (req, res) => {
       throw new Error('User not found');
     }
 
-    // Structure the response data
     const response = {
       academicDetails: user.academicDetails || {},
       athleticDetails: user.athleticDetails || {},
@@ -120,6 +98,7 @@ exports.getRefreshedBasicSocialDetails = async (req, res) => {
       },
     });
     const socialDetails = {
+      socialHandle : response.data.platform_username,
       followers : response.data.follower_count,
     }
     const user = await User.findOneAndUpdate({ email }, {socialDetails} , { new: true });
@@ -127,7 +106,6 @@ exports.getRefreshedBasicSocialDetails = async (req, res) => {
   }catch(error){
     console.error('Error fetching data from external API:', error.message);
 
-    // Handle errors and send an appropriate response
     res.status(error.response?.status || 500).json({
       message: error.response?.data?.message || 'Failed to fetch data from external API',
     });
@@ -149,15 +127,17 @@ exports.getRefreshedPublicProfileAnalytics = async (req, res) => {
       }
     });
     const socialDetails = {
+      socialHandle : response.data.profile.platform_username,
       followers : response.data.profile.follower_count,
-      engagement :  response.data.profile.engagement_rate
+      engagement :  response.data.profile.engagement_rate,
+      average_likes : response.data.profile.average_likes,
+      total_posts: response.data.profile.content_count
     }
    const user = await User.findOneAndUpdate({ email }, {socialDetails} , { new: true });
     res.status(200).json(response.data);
   }catch(error){
     console.error('Error fetching data from external API:', error.message);
 
-    // Handle errors and send an appropriate response
     res.status(error.response?.status || 500).json({
       message: error.response?.data?.message || 'Failed to fetch data from external API',
     });
